@@ -26,7 +26,8 @@ from .models import Article
 
 
 # Model Serializer class for model 'Article'
-# It's more like the django's form
+# It's more like the django's form; used to serialize the data into native python dict.
+# Make the code a bit more concise, since ModelSerializer dedicatedly deals with model instances & querysets.
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article

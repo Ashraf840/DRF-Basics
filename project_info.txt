@@ -14,6 +14,14 @@ Video Ref:  https://www.youtube.com/watch?v=B38aDwUpcFc
 
 4. Inside the app create a model ('Article'). Register that model inside the 'admin.py' file.
 
+#########################
+[Serializer]: These allow complex data such as querysets and model instances to be converted
+to native Python datatypes that can then be easily rendered into JSON, XML or other content types.
+Serializers also provide deserialization, allowing parsed data to be converted back into complex types,
+after first validating the incoming data.
+#########################
+
+
 [Class Serializer - not using]
 5. Now create a serializer class for the newly created model inside a file called 'api_basics/serializers.py'.
     When creating a serializer for a model, we need to define all the fields of that specific model inside the serializer-class.
@@ -33,10 +41,26 @@ Video Ref:  https://www.youtube.com/watch?v=B38aDwUpcFc
         from django.shortcuts import render
         from django.http import HTTPResponse, JSONResponse
         from rest_framework.parsers import JSONParser
-        from .models import Article
-        from .serializers import ArticleSerializer
+        from ..models import Article
+        from ..serializers import ArticleSerializer
+        from rest_framework.decorators import api_view  # rest_framework decorator
+        from rest_framework.response import Response
+        from rest_framework import status
+        from rest_framework.decorators import api_view
 
-10. Create a regular django function. Then just decorate the function with "@api_view()".
+[NB]: Since the func-based api_views are isolated in a different "api_views.py" file in a separated directory
+inside the application & the "models.py" & the "serializers.py" files are 1-step upward, thus they need to be
+imported with two dots ("..") preceding the fileNames.
+
+
+########## @api_view(['Request Methods'])
+10. Create a regular django function. Then just decorate the function with "@api_view()". An "@api_view([])" can contain both the 'GET', 'POST', 'PUT' & 'DELETE' request methods.
 11. Define the urls accordingly in the app's 'urls.py' file.
-12. For returning the serialized data, use the 'serializer.data' in the end of the function.
-13.
+12. For returning the serialized data, use the "Response" method to return 'serializer.data' by the end of the function.
+13. Handle article-not-found-error inside the function to fetch a particular article.
+
+
+
+
+YT Timestamp ===> 42:13
+YT Timestamp ===> 01:09:10 (Next: Class-based API views)
