@@ -61,6 +61,22 @@ imported with two dots ("..") preceding the fileNames.
 
 
 
+[Class based API views]
+14. Create a class based view ("ArticleAPIView") which contain the APIs responsible for displaying the articles-list also create a new article record.
+    Inside, there will be two methods ('get()' & 'post()') to accordingly enlist the articles & create a new article.
+    This class-based-view will be connected to a particular controller alias-named as "articleList_classBased".
+
+15. Create another class-based-view "ArticleDetail" which will be responsible for retrieve, update & delete a particular article-record.
+    Thus, inside this class, there will be a custom-func to fetch the specific article-record, & the rest of the "Retrieve", "PUT", "Delete" will use this function to execute the RUD operations.
+    The other funcs will accept the article-ID as an extra param.
+    The controller connected with this class-based-view is alias-named as "article_classBased".
+
+
+###################
+[ Error handling in the get, put, delete class-func for an article doesn't exist. ]
+###################
+
 
 YT Timestamp ===> 42:13
 YT Timestamp ===> 01:09:10 (Next: Class-based API views)
+YT Timestamp ===> 01:24:53 (Next: Generic views & Mixins)   [Note: Organize the APIs as function-based & class-based in the '/api/' route, before moving forward]
