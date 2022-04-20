@@ -51,7 +51,7 @@ class ArticleDetail(APIView):
             article = Article.objects.get(id=id)
             return article
         except Article.DoesNotExist:
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+            return HttpResponse('Article does not exist', status=status.HTTP_404_NOT_FOUND)
 
     # This class-based api-func is meant to except an extra param as article-id
     def get(self, request, pk):
@@ -71,6 +71,4 @@ class ArticleDetail(APIView):
     def delete(self, request, pk):
         article = self.get_object(id=pk)
         article.delete()
-        articles = Article.objects.order_by('-id')
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)

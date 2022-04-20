@@ -21,6 +21,7 @@ def apiOverview(request):
         'Create': 'article-create/',
         'Update': 'article-update/<str:pk>/',
         'Delete-specific': 'article-delete/<str:pk>/',
+        'API Overview (class-based-views)': 'api/class-based/',
     }
     return Response(api_urls)
 
