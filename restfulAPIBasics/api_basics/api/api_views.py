@@ -17,7 +17,7 @@ def apiOverview(request):
     api_urls = {
         'API Overview': 'api/',
         'List': 'api/article-list/',
-        'Detail View': 'article/<str:pk>',
+        'Detail View': 'article/<str:pk>/',
         'Create': 'article-create/',
         'Update': 'article-update/<str:pk>/',
         'Delete-specific': 'article-delete/<str:pk>/',
