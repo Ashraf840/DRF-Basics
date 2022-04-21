@@ -10,18 +10,16 @@ from rest_framework import status
 
 
 ####### Function-based APIs for CRUD operations on "Article"
-
-
+# API Overview
 @api_view(['GET'])
 def apiOverview(request):
     api_urls = {
-        'API Overview': 'api/',
-        'List': 'api/article-list/',
-        'Detail View': 'article/<str:pk>/',
-        'Create': 'article-create/',
-        'Update': 'article-update/<str:pk>/',
-        'Delete-specific': 'article-delete/<str:pk>/',
-        'API Overview (class-based-views)': 'api/class-based/',
+        'API Overview (func-based-views)': 'api/func-based/',
+        'List': 'api/func-based/article-list/',
+        'Detail View': 'api/func-based/article/<str:pk>/',
+        'Create': 'api/func-based/article-create/',
+        'Update': 'api/func-based/article-update/<str:pk>/',
+        'Delete': 'api/func-based/article-delete/<str:pk>/',
     }
     return Response(api_urls)
 
