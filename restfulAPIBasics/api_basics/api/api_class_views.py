@@ -24,8 +24,6 @@ def apiOverview(request):
     return Response(api_urls)
 
 
-
-
 # Handles Article-list, Create API
 class ArticleAPIView(APIView):
     # Fetch all articles
@@ -40,12 +38,13 @@ class ArticleAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Handles Article-Detail, Update & Delete API
 class ArticleDetail(APIView):
-    # a custom func to fetch a particular article from the "Article" table, which will be used in the retrive,update,delete func
+    # a custom func to fetch a particular article from the "Article" table, which will be used in
+    # the retrieve,update,delete func
     def get_object(self, id):
         try:
             article = Article.objects.get(id=id)
