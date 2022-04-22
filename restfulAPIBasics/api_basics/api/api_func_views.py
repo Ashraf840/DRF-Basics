@@ -8,6 +8,12 @@ from ..serializers import ArticleSerializer     # import the serializer
 from rest_framework import status
 # from django.views.decorators.csrf import csrf_exempt  # not required while using the 'POST' api_view
 
+##############
+# Function View API
+# Gives more flexibility to develop api according to the custom requirements.
+##############
+
+
 
 ####### Function-based APIs for CRUD operations on "Article"
 # API Overview

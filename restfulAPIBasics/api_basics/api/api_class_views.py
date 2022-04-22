@@ -7,7 +7,6 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 
 
-
 ############
 # Class-based-api-views:
 # Make the code-base DRY. This class-based-API uses a single controller to interact with the end-user/ technology.
