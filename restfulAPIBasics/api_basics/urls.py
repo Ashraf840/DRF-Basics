@@ -1,5 +1,10 @@
 from django.urls import path, include
-from .api import api_overview as api_o, api_func_views as afv, api_class_views as acv
+from .api import (
+    api_overview as api_o,
+    api_func_views as afv,
+    api_class_views as acv,
+    api_generic_views as agv,
+)
 
 urlpatterns = [
     # API Endpoints Overview
@@ -17,4 +22,9 @@ urlpatterns = [
     path('api/class-based/', acv.apiOverview, name='api_overview_class'),
     path('api/class-based/article-list/', acv.ArticleAPIView.as_view(), name='api_class_articleList'),   # since it's a class-based API, require to mention ".as_views()" explicitly.
     path('api/class-based/article-detail/<str:pk>/', acv.ArticleDetail.as_view(), name='api_class_article'), # this "pk" param is used inside the "get()" func of the class "ArticleDetail"
+
+    # API Endpoints (Generic-view)
+    path('api/generic-based/', agv.apiOverview, name='api_overview_generic'),
+    path('api/generic-based/article/', agv.ArticleListGenericView.as_view(), name='api_generic_articleList'),
+    path('api/generic-based/article/<str:id>/', agv.ArticleGenericView.as_view(), name='api_generic_article'),
 ]

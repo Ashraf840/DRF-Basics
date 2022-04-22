@@ -72,11 +72,59 @@ imported with two dots ("..") preceding the fileNames.
     The controller connected with this class-based-view is alias-named as "article_classBased".
 
 
-###################
+###################  [ DUE ]
 [ Error handling in the get, put, delete class-func for an article doesn't exist. ]
 ###################
 
 
+[Generic API views]
+    Django’s "generic views" were developed as a shortcut for common usage patterns. They take
+    certain common idioms and patterns found in view development and abstract them so that you can
+    quickly write common views of data without having to repeat yourself.
+
+    Generic views make your code more DRY.
+
+# The "genericView" class will extend the "generics.GenericAPIView" & "mixins" classes.
+    There are conventionally 5 mixins.
+        + ListModelMixin
+        + CreateModelMixin
+        + RetrieveModelMixin
+        + DestroyModelMixin
+        + UpdateModelMixin
+    [Note]: If required, we can extend all the mixin classes inside that specific generic-class-view.
+    But we'll separate the Generic API views into 2 different classes.
+        01. One for displaying the Articles as a list & create new article-record.
+        02. Second one for retrieve, update, delete operations.
+    [Note]: Reason for separating the generic views is that one of the controller will mean to accept "id" as an extra parameter.
+        As consequence, if we place all the operations inside a single generic-api-view-class, then it's throwing an error due to "id" as an extra param.
+    Here, we'll use all the mixins as extended class.
+
+16. Create one generic-view-class ("ArticleListGenericView") which will be responsible for displaying all the Articles and create new article-record.
+    This class will extend the "generics.GenericAPIView", "mixins.CreateModelMixin", "mixins.ListModelMixin".
+    Define the serializer_class & the queryset.
+    Define the "get()" & "post()" functions inside the class.
+
+17. Create another generic-view-class ("ArticleGenericView") which will be responsible for retrieving, updating, deleting a specific article-record.
+    This class will extend "generics.GenericAPIView", "mixins.RetrieveModelMixin", "mixins.UpdateModelMixin", "mixins.DestroyModelMixin".
+    Define the serializer_class, the queryset & the lookup_field.
+    [Note]: for using the "lookup_field", we can build the controller which can accept "id" as an extra param.
+    Define the "get()", "put()" & "delete()" functions inside the class. These functions will also accept the id as an extra param.
+
+[ IMPORTANT ]: The main magic happens while returning particular functions inherited from the mixins accordingly.
+    The mixins abstract all the codes & make the code-base DRY.
+
+
+
+
+
+
+
+
+
+
 YT Timestamp ===> 42:13
 YT Timestamp ===> 01:09:10 (Next: Class-based API views)
-YT Timestamp ===> 01:24:53 (Next: Generic views & Mixins)   [Note: Organize the APIs as function-based & class-based in the '/api/' route, before moving forward]
+YT Timestamp ===> 01:24:53 (Next: Generic views & Mixins)
+YT Timestamp ===> 01:40:42 (Next: Authentication)
+
+
