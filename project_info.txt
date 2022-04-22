@@ -64,16 +64,29 @@ imported with two dots ("..") preceding the fileNames.
 [Class based API views]
 14. Create a class based view ("ArticleAPIView") which contain the APIs responsible for displaying the articles-list also create a new article record.
     Inside, there will be two methods ('get()' & 'post()') to accordingly enlist the articles & create a new article.
-    This class-based-view will be connected to a particular controller alias-named as "articleList_classBased".
+    This class-based-view will be connected to a particular controller alias-named as "api_class_articleList".
 
-15. Create another class-based-view "ArticleDetail" which will be responsible for retrieve, update & delete a particular article-record.
+15. Create another class-based-view ("ArticleDetail") which will be responsible for retrieve, update & delete a particular article-record.
     Thus, inside this class, there will be a custom-func to fetch the specific article-record, & the rest of the "Retrieve", "PUT", "Delete" will use this function to execute the RUD operations.
     The other funcs will accept the article-ID as an extra param.
-    The controller connected with this class-based-view is alias-named as "article_classBased".
+    The controller connected with this class-based-view is alias-named as "api_class_article".
+    [NB]: The 'get()', 'put()' & 'delete()' functions are meant to accept "id" as extra param, which makes their controller "api_class_article" take the 'id' as an extra param inside the URL-string.
 
 
-###################  [ DUE ]
+[Note]: Each class-based-view extends the django's subclass "APIView" which provides the scope
+    of performing retrieve, post, put, delete operations in a single class, aiding to make the
+    code-base follow the DRY principle.
+
+
+###################  [ DONE ]
 [ Error handling in the get, put, delete class-func for an article doesn't exist. ]
+
+Scenario: If a user sent a particular article ID which doesn't exist, Django will throw an error.
+    In the class-based-view ("ArticleDetail") we've modified the "get()" func.
+    Implemented a condition to check the status-code, which will also wrapped up
+    with the "try-except" to make the "get()" func able to handle the 'article' object
+    as well which doesn't contain a status-code.
+
 ###################
 
 
