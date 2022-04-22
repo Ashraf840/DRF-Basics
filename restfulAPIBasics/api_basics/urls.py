@@ -20,8 +20,8 @@ urlpatterns = [
 
     # API Endpoints (Class-based-view)
     path('api/class-based/', acv.apiOverview, name='api_overview_class'),
-    path('api/class-based/article-list/', acv.ArticleAPIView.as_view(), name='api_class_articleList'),   # since it's a class-based API, require to mention ".as_views()" explicitly.
-    path('api/class-based/article-detail/<str:pk>/', acv.ArticleDetail.as_view(), name='api_class_article'), # this "pk" param is used inside the "get()" func of the class "ArticleDetail"
+    path('api/class-based/article/', acv.ArticleAPIView.as_view(), name='api_class_articleList'),   # since it's a class-based API, require to mention ".as_views()" explicitly.
+    path('api/class-based/article/<str:pk>/', acv.ArticleDetail.as_view(), name='api_class_article'), # this "pk" param is used inside the "get()" func of the class "ArticleDetail"
 
     # API Endpoints (Generic-view)
     path('api/generic-based/', agv.apiOverview, name='api_overview_generic'),
