@@ -1,0 +1,246 @@
+--------------- Project Intro ---------------
+
+Video Ref:  https://www.youtube.com/watch?v=B38aDwUpcFc
+
+Deployment Video Ref:
+# [Heroku]: https://www.youtube.com/watch?v=GMbVzl_aLxM
+
+
+
+
+1. Setup the django-boilerplate.
+2. Create an app & install it inside the project.
+3. Install the django restframework at the top of all the apps using the following code.
+        INSTALLED_APPS = [
+            ................,
+            'rest_framework',
+            'api_basics.apps.ApiBasicsConfig',
+        ]
+
+4. Inside the app create a model ('Article'). Register that model inside the 'admin.py' file.
+
+#########################
+[Serializer]: These allow complex data such as querysets and model instances to be converted
+to native Python datatypes that can then be easily rendered into JSON, XML or other content types.
+Serializers also provide deserialization, allowing parsed data to be converted back into complex types,
+after first validating the incoming data.
+#########################
+
+
+[Class Serializer - not using]
+5. Now create a serializer class for the newly created model inside a file called 'api_basics/serializers.py'.
+    When creating a serializer for a model, we need to define all the fields of that specific model inside the serializer-class.
+    [NB]: Instead of 'models.Xfield' use 'serializers.Xfield' inside the serializer-class.
+6. Inside the model-serializer class, define the create, update func for the serializer-class.
+7. For the update-func, we need to fetch & define all the fields through the validated_data. Store them inside the instance-fields after validation.
+    Assign the same name as the fields along with the "instance.fieldName".
+    Lastly, save the instance using the 'save()' function. Then return the instance also.
+
+[Model Serializer]
+8. Instead of using class-serializer, use the model-serializer, because it's more convenient to use (similar to django-forms).
+
+
+[Function based API views]
+9. Function-based API views are similar to regular function-based views. Try to keep separate the api-views in a new directory from the normal views.
+    In that file, import the following python packages.
+        from django.shortcuts import render
+        from django.http import HTTPResponse, JSONResponse
+        from rest_framework.parsers import JSONParser
+        from ..models import Article
+        from ..serializers import ArticleSerializer
+        from rest_framework.decorators import api_view  # rest_framework decorator
+        from rest_framework.response import Response
+        from rest_framework import status
+        from rest_framework.decorators import api_view
+
+[NB]: Since the func-based api_views are isolated in a different "api_views.py" file in a separated directory
+inside the application & the "models.py" & the "serializers.py" files are 1-step upward, thus they need to be
+imported with two dots ("..") preceding the fileNames.
+
+
+########## @api_view(['Request Methods'])
+10. Create a regular django function. Then just decorate the function with "@api_view()". An "@api_view([])" can contain both the 'GET', 'POST', 'PUT' & 'DELETE' request methods.
+11. Define the urls accordingly in the app's 'urls.py' file.
+12. For returning the serialized data, use the "Response" method to return 'serializer.data' by the end of the function.
+13. Handle article-not-found-error inside the function to fetch a particular article.
+
+
+
+[Class based API views]
+14. Create a class based view ("ArticleAPIView") which contain the APIs responsible for displaying the articles-list also create a new article record.
+    Inside, there will be two methods ('get()' & 'post()') to accordingly enlist the articles & create a new article.
+    This class-based-view will be connected to a particular controller alias-named as "api_class_articleList".
+
+15. Create another class-based-view ("ArticleDetail") which will be responsible for retrieve, update & delete a particular article-record.
+    Thus, inside this class, there will be a custom-func to fetch the specific article-record, & the rest of the "Retrieve", "PUT", "Delete" will use this function to execute the RUD operations.
+    The other funcs will accept the article-ID as an extra param.
+    The controller connected with this class-based-view is alias-named as "api_class_article".
+    [NB]: The 'get()', 'put()' & 'delete()' functions are meant to accept "id" as extra param, which makes their controller "api_class_article" take the 'id' as an extra param inside the URL-string.
+
+
+[Note]: Each class-based-view extends the django's subclass "APIView" which provides the scope
+    of performing retrieve, post, put, delete operations in a single class, aiding to make the
+    code-base follow the DRY principle.
+
+
+###################  [ DONE ]
+[ Error handling in the get, put, delete class-func for an article doesn't exist. ]
+
+Scenario: If a user sent a particular article ID which doesn't exist, Django will throw an error.
+    In the class-based-view ("ArticleDetail") we've modified the "get()" func.
+    Implemented a condition to check the status-code, which will also wrapped up
+    with the "try-except" to make the "get()" func able to handle the 'article' object
+    as well which doesn't contain a status-code.
+
+###################
+
+
+[Generic API views]
+    Django’s "generic views" were developed as a shortcut for common usage patterns. They take
+    certain common idioms and patterns found in view development and abstract them so that you can
+    quickly write common views of data without having to repeat yourself.
+
+    Generic views make your code more DRY.
+
+# The "genericView" class will extend the "generics.GenericAPIView" & "mixins" classes.
+    There are conventionally 5 mixins.
+        + ListModelMixin
+        + CreateModelMixin
+        + RetrieveModelMixin
+        + DestroyModelMixin
+        + UpdateModelMixin
+    [Note]: If required, we can extend all the mixin classes inside that specific generic-class-view.
+    But we'll separate the Generic API views into 2 different classes.
+        01. One for displaying the Articles as a list & create new article-record.
+        02. Second one for retrieve, update, delete operations.
+    [Note]: Reason for separating the generic views is that one of the controller will mean to accept "id" as an extra parameter.
+        As consequence, if we place all the operations inside a single generic-api-view-class, then it's throwing an error due to "id" as an extra param.
+    Here, we'll use all the mixins as extended class.
+
+16. Create one generic-view-class ("ArticleListGenericView") which will be responsible for displaying all the Articles and create new article-record.
+    This class will extend the "generics.GenericAPIView", "mixins.CreateModelMixin", "mixins.ListModelMixin".
+    Define the serializer_class & the queryset.
+    Define the "get()" & "post()" functions inside the class.
+
+17. Create another generic-view-class ("ArticleGenericView") which will be responsible for retrieving, updating, deleting a specific article-record.
+    This class will extend "generics.GenericAPIView", "mixins.RetrieveModelMixin", "mixins.UpdateModelMixin", "mixins.DestroyModelMixin".
+    Define the serializer_class, the queryset & the lookup_field.
+    [Note]: for using the "lookup_field", we can build the controller which can accept "id" as an extra param.
+    Define the "get()", "put()" & "delete()" functions inside the class. These functions will also accept the id as an extra param.
+
+[ IMPORTANT ]: The main magic happens while returning particular functions inherited from the mixins accordingly.
+    The mixins abstract all the codes & make the code-base DRY.
+
+
+
+
+
+[Dockerization - Docker]
+
+Workflow:  Create a Dj app -> Prepare the Dj app for Docker -> Build a Docker image -> Start a Docker container
+
+
+# Create a file called "Dockerfile" inside the working directory, since we can instruct how an image will be build.
+  This image will instruct which packages are requried to be installed while running a container upon that image. 
+
+# Create a "requirements.txt" file inside the working directory, thus Docker can utilize this file to install packages in order to get this Django app working inside the Docker container.
+
+# [Inside the 'Dockerfile']
+    Write the cmd to install an operating system to be installed in the Docker image.
+        FROM python:3.8-slim-buster
+    [Note]: Light-weigt linux operating system.
+    Create a working directory inside the OS image.
+        WORKDIR /app
+    Write cmd to copy the "requirements.txt" file from Dj-project's working directory to the working directory of the OS inside of this Docker image.
+        COPY requirements.txt requirements.txt
+    Run the "requirements.txt" file inside the WD of the OS inside the Docker image.
+        RUN pip3 install -r requirements.txt
+    Copy all the folders & files of this Dj app inside the WD of the OS inside the Docker image.
+        COPY . .
+    Write the cmd for Docker, thus it can run the Dj-app inside the Docker container.
+    Make the Dj-app accessible from outside of the container. Set the network-address alongside.
+        CMD ["python3", "manage.py", "runserver", "0.0.0.0:8080"]
+
+    [IMPORTANT]: While copying accross all the Dj-app folders, we don't want to copy the "env" folder inside the docker-container.
+    Thus create a file called ".dockerignore."
+    Then, exclude the "env" folder by writing that inside the ".dockerignore." file.
+        */env
+    
+# Create the Docker image by the cmd. The image will be created based upon the instructions given in the "Dockerfile" file.
+    docker build --tag dj-drf-article .
+  [Note]: To run this cmd, we need to the directory where the "Dockerfile" exists.
+    This dot "." at the end is referring the current Dj directory.
+    Thus the Docker image will be build whatever inside of the Dj-project's WD,
+  [Note]: To check the available Docker images, run the cmd 
+
+# Lastly, create a Docker container.
+    docker run --publish 8080:8080 dj-drf-article
+  [Note]: Setting the container's port-number to our Host-machine's port-number.
+  [IMPORTANT]: Remember to stop any local-server running on that network (127.0.0.1:8080) in the host OS.
+
+
+
+
+[Deploy to Heroku] - 01
+[Note]: Install the 'heroku-cli' inside the OS before using the heroku commands in the terminal
+
+18. Login to your heroku account using the cmd.
+        heroku login
+19. Create a named heroku app for this project using the cmd. (it can also be created from the "heroku" account)
+        heroku create appName
+[Note]: We can create a heroku app with a random name, without specifying the "appName" in the aforementioned cmd.
+    Here, I've created a heroku-app using the name "article-dj-proj" against my Heroku account.
+20. Create a heroku-git remote using the cmd which will interact with the app created in the cloud.
+        heroku git:remote -a article-dj-proj
+    After the "-a", it's specifying the project which in created inside my Heroku account.
+    [Note]: To views the git-remote for the heroku-app, use the cmd.
+        git remote -v
+
+[Note]: While deploying a dj-app, the app doesn't run on a development server, which by default comes with the framework.
+    The cmd "python manage.py runserver" is running the project in a development server.
+    We require a different app-server while the project is deployed. Thus, we need the "gunicorn".
+    Install "gunicorn" in the local pip-repo & update the 'requirements.txt' file.
+        pip install gunicorn
+        pip freeze >requirements.txt
+21. Run the production server using 'gunicorn' where the 'wsgi.py' file requires to be specified alongside.
+        gunicorn filePath.wsgi
+
+    [Note]: "Gunicorn" doesn't support in the Windows platform. Thus, a nice alternative for running a WSGI app (like Django) is "waitress".
+    Install the "waitress" repo & update the 'requirements.txt' file.
+        pip install waitress
+    Now, run the app-server using "waitress" instead of "gunicorn" using the following cmd inside the local machine.
+        waitress-serve --listen=domain:8000 appName:app
+        waitress-serve --listen=domain:8000 appName.wsgi:application
+    [Note]: The domain can be a local domain or rented one, but that domain is required to be enlisted inside the "ALLOWED_HOSTS" section of the "settings.py" file.
+22. Create a heroku "Procfile" which will contain the cmds on how to run the Django-app inside the heroku's cloud environment.
+    Use the timestamp of "4:40" of the following YT video link to understand what cmds will exist inside the Procfile.
+        https://www.youtube.com/watch?v=GMbVzl_aLxM
+23. Run the app using heroku Procfile uisng either of the following cmd.
+        web: gunicorn restfulAPIBasics.wsgi
+    Or,
+        waitress-serve --listen=127.0.0.2:8080 restfulAPIBasics.wsgi:application
+    Or,
+        waitress-serve --listen=127.0.0.2:8080 restfulAPIBasics.wsgi:application --log-file -
+
+    [Error]: Cannot deploy dj-app to Heroku or, run the app using heroku-local.
+    Article Link:  https://simpleisbetterthancomplex.com/tutorial/2016/08/09/how-to-deploy-django-applications-on-heroku.html
+
+
+
+
+
+[Deploy to Heroku] - 02
+YT Channel: Corey Schafer
+Link: https://www.youtube.com/watch?v=6DI_7Zja8Zc
+
+
+
+
+
+
+YT Timestamp ===> 42:13
+YT Timestamp ===> 01:09:10 (Next: Class-based API views)
+YT Timestamp ===> 01:24:53 (Next: Generic views & Mixins)
+YT Timestamp ===> 01:40:42 (Next: Authentication)
+
+
