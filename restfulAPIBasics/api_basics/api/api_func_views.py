@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
-from ..models import Article    # getting 1-directory upward to get the 'models.py' file
+# getting 1-directory upward to get the 'models.py' file
+from ..models import Article
 
 from rest_framework.decorators import api_view  # rest_framework decorator
-from rest_framework.response import Response    # throw the response in the DRF UI
+# throw the response in the DRF UI
+from rest_framework.response import Response
 from ..serializers import ArticleSerializer     # import the serializer
 from rest_framework import status
 # from django.views.decorators.csrf import csrf_exempt  # not required while using the 'POST' api_view
@@ -14,8 +16,7 @@ from rest_framework import status
 ##############
 
 
-
-####### Function-based APIs for CRUD operations on "Article"
+# Function-based APIs for CRUD operations on "Article"
 # API Overview
 @api_view(['GET'])
 def apiOverview(request):
@@ -67,16 +68,15 @@ def article_update(request, pk):
     return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['DELETE'])
 def article_delete(request, pk):
     article = Article.objects.get(id=pk)
     article.delete()
 
-    # after deletion, return the new article-list
-    articles = Article.objects.all()
-    serializer = ArticleSerializer(articles, many=True)
-    return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+    # [AFTER DEPLOYING THIS PROJ TO HEROKU - DOESN'T RETURN ANYTHING AFTER DELETION]
+    # after deletion, return the new article-list in descending order
+    # articles = Article.objects.all()
+    # serializer = ArticleSerializer(articles, many=True)
+    # return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-
-
+    return Response(status=status.HTTP_204_NO_CONTENT)

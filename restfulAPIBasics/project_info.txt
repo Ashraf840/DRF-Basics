@@ -135,7 +135,7 @@ Scenario: If a user sent a particular article ID which doesn't exist, Django wil
 
 
 
-[Dockerization - Docker]
+[Dockerization - Docker]- Update the information according to the heroku deployment method-3
 
 Workflow:  Create a Dj app -> Prepare the Dj app for Docker -> Build a Docker image -> Start a Docker container
 
@@ -177,6 +177,18 @@ Workflow:  Create a Dj app -> Prepare the Dj app for Docker -> Build a Docker im
     docker run --publish 8080:8080 dj-drf-article
   [Note]: Setting the container's port-number to our Host-machine's port-number.
   [IMPORTANT]: Remember to stop any local-server running on that network (127.0.0.1:8080) in the host OS.
+
+
+
+[Upload to dockerhub]
+# Create a new instance based on docker image.
+    docker tag imageName:tagName dockerhubUsername/imageName:latest
+# Login into the dockerhub account.
+    docker login
+# This new instance will be pushed into dockerhub.
+    docker push dockerhubUsername/imageName:latest
+
+>>>> Now follow the steps of "[Deploy to Heroku] - 03"
 
 
 
@@ -233,6 +245,30 @@ Workflow:  Create a Dj app -> Prepare the Dj app for Docker -> Build a Docker im
 YT Channel: Corey Schafer
 Link: https://www.youtube.com/watch?v=6DI_7Zja8Zc
 
+
+
+[Deploy to Heroku] - 03 [Following this method]
+Link: https://www.youtube.com/watch?v=Oy71OgKZbOQ&t=2s
+
+# For deploying the docker image into heroku, we are required to modify the 'Dockerfile'.
+  Comment out the 'EXPOSE 8080'. Modify the docker cmd to run the dj-app into heroku container.
+    CMD gunicorn restfulAPIBasics.wsgi:application --bing 0.0.0.0:$PORT
+# Login into heroku container through the terminal. First login into heroku through terminal.
+    heroku auth:login
+    heroku container:login
+  [NB]: It'll give the following error.
+    Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/version": dial unix /var/run/docker.sock: connect: permission denied.
+  [Permanent Solution]:  Link --> https://serverfault.com/a/821102
+  [Temp Solution]: Run the following cmd inside terminal.
+    sudo chmod 666 /var/run/docker.sock  
+# Create a new app-repo into heroku account.
+    heroku create herokuAppName
+  [Note]: Besides, creatinh an app-repo, it'll create the git remote according to the appName.
+# Push the docker image into heroku's container registry, here, the docker & heroku is going to work together.
+    heroku container:push web -a=herokuAppName
+[Optional]: Before releasing the app, manually config/inject the environment variables into that heroku container's repo.
+# Release the app which is deployed into heroku.
+    heroku container:release -a=herokuAppName web
 
 
 
