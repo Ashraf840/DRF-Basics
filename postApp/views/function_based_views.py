@@ -10,8 +10,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .serializers import PostSerializer as PlainPostSerializer, PostModelSerializer
-from .models import Post
+from ..serializers import PostSerializer as PlainPostSerializer, PostModelSerializer
+from ..models import Post
 from django.shortcuts import get_object_or_404
 
 
@@ -33,6 +33,7 @@ from django.shortcuts import get_object_or_404
 #         "content":"This is to give reasons why it is hard"
 #     },
 # ]
+
 
 # Function-based api-view
 @api_view(http_method_names=["GET", "POST"])
@@ -57,12 +58,13 @@ def posts_list(request:Request):
 
 
 # Using native python list to mock fetch post record from db
-@api_view(http_method_names=["GET"])
-def post_detail(request:Request, id:int):
-    post=posts[id]
-    if posts:
-        return Response(data=post, status=status.HTTP_200_OK)
-    return Response(data={"error":"Not found"}, status=status.HTTP_404_NOT_FOUND)
+# @api_view(http_method_names=["GET"])
+# def post_detail(request:Request, id:int):
+#     post=posts[id]
+#     if posts:
+#         return Response(data=post, status=status.HTTP_200_OK)
+#     return Response(data={"error":"Not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 # Used plain serializer: PostSerializer
 @api_view(http_method_names=["POST"])
@@ -81,6 +83,7 @@ def post_create(request:Request):
             "data":serializer.data
         }
         return Response(data=response, status=status.HTTP_201_CREATED)
+
 
 # Used model serializer: PostModelSerializer
 @api_view(http_method_names=["POST"])
