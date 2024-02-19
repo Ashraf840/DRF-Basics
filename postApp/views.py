@@ -128,3 +128,21 @@ def post_detail_db(request:Request, id:int):
     from outside to the serializer to make any manipulation to the
     associated db table.
     """
+
+
+@api_view(http_method_names=["PUT"])
+def post_update(request:Request, id:int):
+    post=get_object_or_404(Post,pk=id)
+    data=request.data
+    serializer=PostModelSerializer(instance=post, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    return Response(data=serializer.error, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(http_method_names=["DELETE"])
+def post_delete(request:Request, id:int):
+    post=get_object_or_404(Post,pk=id)
+    post.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)

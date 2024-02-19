@@ -8,5 +8,7 @@ urlpatterns = [
     path('create/model-serializer/', views.post_create_ms, name='post_create_ms'),
     path('detail/<int:id>/', views.post_detail, name='post_detail'),
     path('detail/db/<int:id>/', views.post_detail_db, name='post_detail_db'),
+    path('update/<int:id>/', views.post_update, name='post_update'),
+    path('delete/<int:id>/', views.post_delete, name='post_delete'),
 ]
 
