@@ -1,9 +1,15 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     function_based_views as fbv,
     class_based_views as cbv,
     generic_api_views_and_mixins as gavam,
+    views_on_viewsets_and_routers as vovar,
 )
+from rest_framework.routers import DefaultRouter
+
+router=DefaultRouter()
+
+router.register("", vovar.PostViewset, basename="PostViewset")
 
 urlpatterns = [
     # Function Based Views
@@ -24,5 +30,8 @@ urlpatterns = [
     path('generic/list-create/', gavam.PostListCreateGenericView.as_view(), name='PostListCreateGenericView'),
     path('generic/retrieve-update-delete/<int:pk>/', gavam.PostRetrieveUpdateDestroyGenericView.as_view(), name='PostRetrieveUpdateDestroyGenericView'),
     # NB: Required to define "pk" as extra param instead of "id" while creating api endpoint using GenericAPIView
+
+    # Viewset API Endpoint
+    path("viewset/", include(router.urls)),
 ]
 
