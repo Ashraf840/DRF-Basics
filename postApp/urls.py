@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     function_based_views as fbv,
     class_based_views as cbv,
+    generic_api_views_and_mixins as gavam,
 )
 
 urlpatterns = [
@@ -18,5 +19,8 @@ urlpatterns = [
     # Class Based Views
     path('class/list-create/', cbv.PostListCreateView.as_view(), name='PostListCreateView'),
     path('class/retrieve-update-delete/<int:id>/', cbv.PostRetrieveUpdateDeleteView.as_view(), name='PostRetrieveUpdateDeleteView'),
+
+    # Generic API Views
+    path('generic/list-create/', gavam.PostListCreateGenericView.as_view(), name='PostListCreateGenericView'),
 ]
 

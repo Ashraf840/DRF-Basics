@@ -6,6 +6,14 @@ from ..serializers import PostModelSerializer
 from ..models import Post
 from django.shortcuts import get_object_or_404
 
+"""
+Notes (APIView): Unlike function-based views, the methods can be defined together under classes. 
+Like listing-out all the data & creating a record using same api endpoint. 
+Similarly, the get-record-by-id, update-specific-record, delete-specific-record, 
+all these three functionalities can be achieved using a single endpoint.
+No need to define scrattered functions to obtain those functionalities.
+Moreover, it take less urls-paths to be defined in the urlpatterns.
+"""
 
 class PostListCreateView(APIView):
 
