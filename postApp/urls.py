@@ -17,5 +17,6 @@ urlpatterns = [
 
     # Class Based Views
     path('class/list-create/', cbv.PostListCreateView.as_view(), name='PostListCreateView'),
+    path('class/retrieve-update-delete/<int:id>/', cbv.PostRetrieveUpdateDeleteView.as_view(), name='PostRetrieveUpdateDeleteView'),
 ]
 
