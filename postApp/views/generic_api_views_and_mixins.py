@@ -25,3 +25,21 @@ class PostListCreateGenericView(
     def post(self, request:Request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+
+class PostRetrieveUpdateDestroyGenericView(
+    generics.GenericAPIView
+    , mixins.RetrieveModelMixin
+    , mixins.UpdateModelMixin
+    , mixins.DestroyModelMixin
+):
+    serializer_class=PostModelSerializer
+    queryset=Post.objects.all()
+
+    def get(self, request:Request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def put(self, request:Request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request:Request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

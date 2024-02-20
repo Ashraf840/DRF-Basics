@@ -22,5 +22,7 @@ urlpatterns = [
 
     # Generic API Views
     path('generic/list-create/', gavam.PostListCreateGenericView.as_view(), name='PostListCreateGenericView'),
+    path('generic/retrieve-update-delete/<int:pk>/', gavam.PostRetrieveUpdateDestroyGenericView.as_view(), name='PostRetrieveUpdateDestroyGenericView'),
+    # NB: Required to define "pk" as extra param instead of "id" while creating api endpoint using GenericAPIView
 ]
 
