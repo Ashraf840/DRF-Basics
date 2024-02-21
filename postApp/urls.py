@@ -4,6 +4,7 @@ from .views import (
     class_based_views as cbv,
     generic_api_views_and_mixins as gavam,
     views_on_viewsets_and_routers as vovar,
+    views_on_model_viewsets as vomv,
 )
 from rest_framework.routers import DefaultRouter
 
@@ -32,6 +33,17 @@ urlpatterns = [
     # NB: Required to define "pk" as extra param instead of "id" while creating api endpoint using GenericAPIView
 
     # Viewset API Endpoint
-    path("viewset/", include(router.urls)),
+    path('viewset/', include(router.urls)),
+
+    # Model Viewset API Endpoint
+    path('model-viewset/', vomv.PostModelViewset.as_view({
+        'get': 'list'
+        , 'post': 'create'
+    }), name='PostModelViewset'),
+    path('model-viewset/<int:pk>/', vomv.PostModelViewset.as_view({
+        'get': 'retrieve'
+        , 'put': 'update'
+        , 'delete': 'destroy'
+    }), name='PostModelViewset'),
 ]
 
