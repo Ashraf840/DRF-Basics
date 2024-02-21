@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "postApp.apps.PostappConfig",
+    "account.apps.AccountConfig",
 
     # thirs-party apps
     "rest_framework",
@@ -71,6 +72,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+AUTH_USER_MODEL="account.User"
 
 
 # Password validation
