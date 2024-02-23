@@ -62,6 +62,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "blogSystem.wsgi.application"
 
+REST_FRAMEWORK = {
+    "NON_FIELD_ERRORS_KEY":"errors",
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
