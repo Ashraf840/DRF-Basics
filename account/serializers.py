@@ -26,4 +26,5 @@ class UserSignupSerializer(serializers.ModelSerializer):
         user=super().create(validated_data) # Create user using this "create()" method
         user.set_password(password)
         user.save()
+        # Create a token for the user after account creation
         return user

@@ -3,6 +3,9 @@ from rest_framework import generics, status
 from .serializers import UserSignupSerializer
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.decorators import APIView
+from django.contrib.auth import authenticate
+from .tokens import create_jwt_pair
 
 class UserSignupGenericView(generics.GenericAPIView):
     
@@ -22,3 +25,20 @@ class UserSignupGenericView(generics.GenericAPIView):
             return Response(data=response, status=status.HTTP_201_CREATED)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class LoginAPIView(APIView):
+    
+    def post(self, request:Request):
+        email=request.data.get('email')
+        password=request.data.get('password')
+        user=authenticate(request, email=email, password=password)
+
+        if user is not None:
+            # Create JWT token
+            tokens=create_jwt_pair(user)
+            response={
+                "message":"Login successful",
+                "token":tokens
+            }
+            return Response(data=response, status=status.HTTP_200_OK)
+        return Response(data={"message":"Login failed"}, status=status.HTTP_401_UNAUTHORIZED)
