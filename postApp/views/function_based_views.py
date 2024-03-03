@@ -9,10 +9,12 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from ..serializers import PostSerializer as PlainPostSerializer, PostModelSerializer
 from ..models import Post
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from account.serializers import CurrentUserPostsSerializer
 
 
 # Mock a simple database table by enlisting 3 posts
@@ -149,3 +151,12 @@ def post_delete(request:Request, id:int):
     post=get_object_or_404(Post,pk=id)
     post.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(http_method_names=['GET'])
+@permission_classes([IsAuthenticated])
+def get_post_for_current_user(request:Request):
+    user=request.user
+    serializer=CurrentUserPostsSerializer(instance=user,context={'request':request})    # `HyperlinkedRelatedField` requires the "request" object in the serializer context
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
+

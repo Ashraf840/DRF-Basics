@@ -18,6 +18,7 @@ urlpatterns = [
     path('list/', fbv.posts_list, name='posts_list'),
     path('create/', fbv.post_create, name='post_create'),
     path('create/model-serializer/', fbv.post_create_ms, name='post_create_ms'),
+    path('current-user/', fbv.get_post_for_current_user, name='get_post_for_current_user'),
     # path('detail/<int:id>/', fbv.post_detail, name='post_detail'),
     path('detail/db/<int:id>/', fbv.post_detail_db, name='post_detail_db'),
     path('update/<int:id>/', fbv.post_update, name='post_update'),

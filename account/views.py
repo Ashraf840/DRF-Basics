@@ -6,12 +6,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import APIView
 from django.contrib.auth import authenticate
 from .tokens import create_jwt_pair
+from rest_framework.permissions import AllowAny
 
 class UserSignupGenericView(generics.GenericAPIView):
     
-    # NB: I can user "GenericAPIView" without using "ModelMixins"
+    # NB: I can use "GenericAPIView" without using "ModelMixins"
 
     serializer_class=UserSignupSerializer
+    permission_classes=[AllowAny]
 
     def post(self, request:Request):
         data=request.data
@@ -27,8 +29,11 @@ class UserSignupGenericView(generics.GenericAPIView):
 
 
 class LoginAPIView(APIView):
+
+    permission_classes=[AllowAny]
     
     def post(self, request:Request):
+        # TODO: This logic should be moved to a "LoginSerializer"
         email=request.data.get('email')
         password=request.data.get('password')
         user=authenticate(request, email=email, password=password)

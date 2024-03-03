@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import User
 from rest_framework.validators import ValidationError
+from rest_framework_simplejwt.tokens import RefreshToken
+from tokenize import TokenError
 
 
 class UserSignupSerializer(serializers.ModelSerializer):
@@ -26,5 +28,18 @@ class UserSignupSerializer(serializers.ModelSerializer):
         user=super().create(validated_data) # Create user using this "create()" method
         user.set_password(password)
         user.save()
-        # Create a token for the user after account creation
         return user
+
+
+class CurrentUserPostsSerializer(serializers.ModelSerializer):
+
+    # posts=serializers.StringRelatedField(many=True)
+    posts=serializers.HyperlinkedRelatedField(
+        many=True
+        , view_name='PostRetrieveUpdateDestroyGenericView'  # reverse-name of a generic api view w/ modelMixins
+        , queryset=User.objects.all()   # Define a context
+        )
+
+    class Meta:
+        model=User
+        fields=['id','username','email','posts']

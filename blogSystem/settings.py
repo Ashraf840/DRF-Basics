@@ -31,7 +31,7 @@ INSTALLED_APPS = [
 
     # thirs-party apps
     "rest_framework",
-    "rest_framework.authtoken",
+    # "rest_framework.authtoken",   # Deprecated token-auth; Django recommends to use only JWT token based authentication
 ]
 
 MIDDLEWARE = [
@@ -70,10 +70,10 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 
-    # # Commented out because it hinders to make apost request to user-signup api to create new user
-    # "DEFAULT_PERMISSION_CLASSES":(
-    #     "rest_framework.permissions.IsAuthenticated",
-    # ),
+    # Commented out because it hinders to make apost request to user-signup api to create new user
+    "DEFAULT_PERMISSION_CLASSES":(
+        "rest_framework.permissions.IsAuthenticated",   # Use "permission_classes=[AllowAny]" to bypass jwt-auth-token to any specific view
+    ),
 }
 
 SIMPLE_JWT = {

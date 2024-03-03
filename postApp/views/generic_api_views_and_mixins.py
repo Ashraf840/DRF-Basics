@@ -19,6 +19,13 @@ class PostListCreateGenericView(
     serializer_class=PostModelSerializer
     queryset=Post.objects.all()
 
+    # Hook of model mixins, dictates how our model mixins will work.
+    # Hooks are written prefixing as "perform" then the name of the functionality (eg. create, update, retrieve, delete)
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(author=user)
+        return super().perform_create(serializer)
+
     def get(self, request:Request, *args, **kwargs):
         return self.list(request, *args, **kwargs)  # Probably, the "self.list()" method is only invoking the queryset attribute of this class
     

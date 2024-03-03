@@ -28,7 +28,7 @@ class PostListCreateView(APIView):
         data=request.data
         serializer=self.serializer_class(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(author=self.request.user)   # TODO: [Add author inside "Post" table-2] automatically get user-info from the JWT token passed with the "header" of a request before adding that user as author;
             response={
                 "message":"Post created",
                 "data":serializer.data
